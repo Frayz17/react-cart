@@ -18,14 +18,14 @@ export default class App extends Component {
 
         "2": {
           id: "2",
-          title: "Apple",
+          title: "Melon",
           price: 20,
           quantity: 7
         },
 
         "3": {
           id: "3",
-          title: "Apple",
+          title: "Orange",
           price: 8,
           quantity: 8
         }
