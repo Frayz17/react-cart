@@ -34,33 +34,40 @@ export default class App extends Component {
         }
       },
 
-      selected: []
+      selectedProducts: []
     }
   }
 
   handleBuy = (product) => {
     const _product = {...product};
-    _product.quantity = _product.quantity - 1
 
-    const _selected = this.state.selected;
-    _selected.push(_product);
+    if (_product.quantity > 0) {
+      _product.quantity = _product.quantity - 1
 
-    this.setState(prevstate => ({
-      inventory: {
-        ...prevstate.inventory,
-        [product.id]: _product
-      },
-      selected: _selected
-    }))
-    console.log(this.state);    
+      const _selectedProducts = this.state.selectedProducts;
+      _selectedProducts.push(_product);
+
+      this.setState(prevstate => ({
+        inventory: {
+          ...prevstate.inventory,
+          [product.id]: _product
+        },
+        selectedProducts: _selectedProducts
+      }))
+    }
   }
 
   render() {
-    const {cart, inventory} = this.state;
+    const {cart, inventory, selectedProducts} = this.state;
     return (
       <div>
-        <Inventory cart={cart} inventory={inventory} handleBuy={this.handleBuy} />
         <Cart />
+        <Inventory 
+          cart={cart}
+          inventory={inventory}
+          handleBuy={this.handleBuy}
+          selectedProducts={selectedProducts}
+        />
       </div>
     );
   }

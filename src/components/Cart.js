@@ -7,7 +7,7 @@ export default function Cart() {
 
   return (
     <div>
-      this is cart
+      <h2>Cart</h2>
     </div>
   )
 }
