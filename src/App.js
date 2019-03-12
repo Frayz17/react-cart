@@ -61,7 +61,12 @@ export default class App extends Component {
     const {cart, inventory, selectedProducts} = this.state;
     return (
       <div>
-        <Cart />
+        <Cart 
+          cart={cart}
+          inventory={inventory}
+          handleBuy={this.handleBuy}
+          selectedProducts={selectedProducts}
+        />
         <Inventory 
           cart={cart}
           inventory={inventory}
