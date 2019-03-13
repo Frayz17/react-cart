@@ -2,7 +2,8 @@ import * as R from 'ramda';
 import React, { Component } from 'react';
 import Cart from './components/Cart';
 import Inventory from "./components/Inventory";
-import Product from './components/Product';
+import { debug } from 'util';
+// import Product from './components/Product';
 
 export default class App extends Component {
   constructor(props) {
@@ -38,23 +39,69 @@ export default class App extends Component {
     }
   }
 
-  handleBuy = (product) => {
+  // handleBuy = (product) => {
+  //   const _product = {...product};
+
+  //   if (_product.quantity > 0) {
+  //     _product.quantity = _product.quantity - 1
+
+  //     const _selectedProducts = this.state.selectedProducts;
+  //     _selectedProducts.push(_product);
+
+  //     this.setState(prevstate => ({
+  //       inventory: {
+  //         ...prevstate.inventory,
+  //         [product.id]: _product
+  //       },
+  //       selectedProducts: _selectedProducts
+  //     }))
+  //   }
+  // }
+
+  takeProductFromInventory = (product) => {
     const _product = {...product};
 
     if (_product.quantity > 0) {
       _product.quantity = _product.quantity - 1
-
-      const _selectedProducts = this.state.selectedProducts;
-      _selectedProducts.push(_product);
 
       this.setState(prevstate => ({
         inventory: {
           ...prevstate.inventory,
           [product.id]: _product
         },
-        selectedProducts: _selectedProducts
       }))
     }
+
+    return {...product};
+  }
+
+  handleBuy = (product) => {
+    const _product = this.takeProductFromInventory(product);
+
+    // take one product (quantity = 1) and insert it to the cart
+    _product.quantity = 1;
+
+    let _cart = {...this.state.cart};
+
+    if (product.id in _cart) {
+      _cart[product.id].quantity = _cart[product.id].quantity + 1
+    } else {
+      _cart = {
+        ..._cart,
+        [product.id]: _product
+      }
+    }
+    
+    this.setState(prevstate => ({
+      cart: _cart
+    }))
+  }
+
+  checkout = () => {
+    this.setState(prevState => ({
+      ...prevState,
+      cart: {}
+    }))
   }
 
   render() {
@@ -65,7 +112,7 @@ export default class App extends Component {
           cart={cart}
           inventory={inventory}
           handleBuy={this.handleBuy}
-          selectedProducts={selectedProducts}
+          checkout={this.checkout}
         />
         <Inventory 
           cart={cart}
