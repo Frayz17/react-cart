@@ -3,8 +3,9 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Product from './Product';
 
-export default function Cart({cart, inventory, handleBuy, checkout}) {
+export default function Cart({cart, inventory, handleBuy, checkout, removeFromCart}) {
   let products = R.sortBy(R.prop("title"), R.values(cart));
+  // let productsFromInventory = R.sortBy(R.prop("title"), R.values(inventory));
   
   function totalSumm(products) {
     return products.reduce((acc, curr) => acc + (curr.price * curr.quantity), 0)
@@ -19,8 +20,10 @@ export default function Cart({cart, inventory, handleBuy, checkout}) {
               <Item
                 key={product.id}
                 product={product}
+                productsFromInventory={inventory}
                 inventory={inventory}
-                handleBuy={handleBuy}
+                handleBuy={handleBuy}  
+                removeFromCart={removeFromCart}             
               />
             ))
             :
@@ -29,7 +32,7 @@ export default function Cart({cart, inventory, handleBuy, checkout}) {
 
         Total: {totalSumm(products)}$ 
         {" "}
-        {products.length ? 
+        {totalSumm(products) > 0 ? 
           <button onClick={checkout}>Checkout</button>
           :
           <button disabled>Checkout</button>
@@ -39,23 +42,33 @@ export default function Cart({cart, inventory, handleBuy, checkout}) {
 }
 
 
-function Item({product, inventory, handleBuy}) {
+function Item({product, productsFromInventory, inventory, handleBuy, removeFromCart}) {
 
-  // console.log(product);
-  const increment = (product) => {
-    console.log(product);
-  }
-
-  const decrement = () => {
-    console.log('hello')
-  }
+  const productFromInventory = productsFromInventory[product.id]
 
   return (
     <div>
-      {product.title} - ${product.price} x {product.quantity}
+      {product.quantity > 0 ? 
+        <React.Fragment>
+          {product.title} - ${product.price} x {product.quantity}
+        </React.Fragment>
+        :
+        <React.Fragment>
+          <s>{product.title} - ${product.price} x {product.quantity}</s>
+        </React.Fragment>
+      }
       {" "}
-      <button id="btn-plus" onClick={()=> increment(product)}>+1</button> {" "}
-      <button id="btn-minus" onClick={decrement}>-1</button> {" "}   
+      {productFromInventory.quantity > 0 ?
+        <button onClick={()=> handleBuy(productFromInventory, 'inventory')}>+1</button>
+        :
+        <button disabled>+1</button>
+      }       
+      {" "}
+      {product.quantity > 0 ? 
+        <button onClick={() => removeFromCart(product.id)}>-1</button>
+        :
+        <button disabled>-1</button>
+      }
       {" "}
       ({inventory[product.id].quantity} in stock)
     </div>

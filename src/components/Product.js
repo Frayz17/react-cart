@@ -15,7 +15,8 @@ export default function Product({product, handleBuy, selectedProducts}) {
       {" "}
       {
         product.quantity > 0 ? 
-        <button onClick={() => handleBuy(product)}>Buy</button> :
+        <button onClick={() => handleBuy(product, 'inventory')}>Buy</button>
+        : // or handleBuy.bind(null, product, 'inventory')
         <button disabled>Buy</button>
       }
       {" "}
