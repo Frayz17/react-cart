@@ -15,7 +15,7 @@ export default function Inventory({cart, inventory, handleBuy, selectedProducts}
           key={product.id}
           product={product}  
           handleBuy={handleBuy}
-          selectedProducts={selectedProducts}
+          cart={cart}
         />
       ), products) }
     </div>

@@ -1,11 +1,9 @@
 import * as R from 'ramda';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Product from './Product';
 
 export default function Cart({cart, inventory, handleBuy, checkout, removeFromCart}) {
   let products = R.sortBy(R.prop("title"), R.values(cart));
-  // let productsFromInventory = R.sortBy(R.prop("title"), R.values(inventory));
   
   function totalSumm(products) {
     return products.reduce((acc, curr) => acc + (curr.price * curr.quantity), 0)
@@ -14,6 +12,7 @@ export default function Cart({cart, inventory, handleBuy, checkout, removeFromCa
   return (
     <div>
       <h2>Cart</h2>
+      <div>
         {
           (products.length) ? 
             products.map(product => (
@@ -27,16 +26,18 @@ export default function Cart({cart, inventory, handleBuy, checkout, removeFromCa
               />
             ))
             :
-            <p><i>The cart is empty.</i></p>
+            <div><i>The cart is empty.</i></div>
         }
+        <br/>
+      </div>
 
-        Total: {totalSumm(products)}$ 
-        {" "}
-        {totalSumm(products) > 0 ? 
-          <button onClick={checkout}>Checkout</button>
-          :
-          <button disabled>Checkout</button>
-        }
+      Total: {totalSumm(products)}$ 
+      {" "}
+      {totalSumm(products) > 0 ? 
+        <button onClick={checkout}>Checkout</button>
+        :
+        <button disabled>Checkout</button>
+      }
     </div>
   )
 }
@@ -59,7 +60,7 @@ function Item({product, productsFromInventory, inventory, handleBuy, removeFromC
       }
       {" "}
       {productFromInventory.quantity > 0 ?
-        <button onClick={()=> handleBuy(productFromInventory, 'inventory')}>+1</button>
+        <button onClick={()=> handleBuy(productFromInventory.id)}>+1</button>
         :
         <button disabled>+1</button>
       }       

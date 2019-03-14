@@ -1,9 +1,6 @@
-import * as R from 'ramda';
 import React, { Component } from 'react';
 import Cart from './components/Cart';
 import Inventory from "./components/Inventory";
-import { debug } from 'util';
-// import Product from './components/Product';
 
 export default class App extends Component {
   constructor(props) {
@@ -34,78 +31,39 @@ export default class App extends Component {
           quantity: 8
         }
       },
-
-      selectedProducts: []
     }
   }
 
-  // takeProductFromInventory = (product) => {
-  //   const _product = {...product};
-
-  //   if (_product.quantity > 0) {
-  //     _product.quantity = _product.quantity - 1
-
-  //     this.setState(prevstate => ({
-  //       inventory: {
-  //         ...prevstate.inventory,
-  //         [product.id]: _product
-  //       },
-  //     }))
-  //   }
-
-  //   return {...product};
-  // }
-
-  // handleBuy = (product) => {
-  //   const _product = this.takeProductFromInventory(product);
-
-  //   // take one product (quantity = 1) and insert it to the cart
-  //   _product.quantity = 1;
-
-  //   let _cart = {...this.state.cart};
-
-  //   if (product.id in _cart) {
-  //     _cart[product.id].quantity = _cart[product.id].quantity + 1
-  //   } else {
-  //     _cart = {
-  //       ..._cart,
-  //       [product.id]: _product
-  //     }
-  //   }
-    
-  //   this.setState(prevstate => ({
-  //     cart: _cart
-  //   }))
-  // }
-
   // reduce products quantity by 1 from storage (cart or inventory)
-  decrementProductQuantity = (products, storageName) => {
-    const _products = {...products};
+  decrementProductQuantity = (product, storageName) => {
+    const _product = {...product};
 
-    if (_products.quantity > 0) {
-      _products.quantity = _products.quantity - 1;
+    if (_product.quantity > 0) {
+      _product.quantity = _product.quantity - 1;
     }
 
     this.setState(prevState => ({
       [storageName]: {
         ...prevState[storageName],
-        [_products.id]: _products
+        [_product.id]: _product
       }
     }))
 
-    return {..._products};
+    return {..._product};
   }
 
-  handleBuy = (products, storage) => {
-    if (products.quantity > 0) {
-      const _products = this.decrementProductQuantity(products, storage);
+  handleBuy = (id) => {
+    let product = {...this.state.inventory[id]};
+
+    if (product.quantity > 0) {
+      product = this.decrementProductQuantity(product, 'inventory');
       
       // take one product (quantity = 1) and insert it to the cart
-      _products.quantity = 1;
-      const product = _products;
+      product.quantity = 1;
 
       let cart = {...this.state.cart};
 
+      // if product exist in cart, add quantity. In other case, add product in cart.
       if (product.id in cart) {
         cart[product.id].quantity = cart[product.id].quantity + 1
       } else {
@@ -123,8 +81,8 @@ export default class App extends Component {
   }
 
   removeFromCart = (id) => {
-    let product = this.state.cart[id];
-    const inventory = this.state.inventory;
+    let product = {...this.state.cart[id]};
+    const inventory = {...this.state.inventory};
 
     if (product.quantity > 0) {
       product = this.decrementProductQuantity(product, 'cart');
@@ -150,7 +108,7 @@ export default class App extends Component {
   }
 
   render() {
-    const {cart, inventory, selectedProducts} = this.state;
+    const {cart, inventory} = this.state;
     return (
       <div>
         <Cart 
@@ -164,7 +122,6 @@ export default class App extends Component {
           cart={cart}
           inventory={inventory}
           handleBuy={this.handleBuy}
-          selectedProducts={selectedProducts}
         />
       </div>
     );
