@@ -1,17 +1,7 @@
 import React, { Component } from 'react';
-import * as R from 'ramda';
 
-export default function Product({product, handleBuy, cart}) {
-  // let selectedItem;
-  // let productsFromCart = R.sortBy(R.prop("title"), R.values(cart));
+export default function ProductInInventory({product, handleBuy, cart}) {
 
-
-  // if (productsFromCart.length) {
-  //   selectedItem = productsFromCart.filter(item => (
-  //     item.id === product.id
-  //   ))
-  // }
-  
   function amountProductsSelected() {
     if (cart[product.id] !== undefined) {
       return cart[product.id].quantity;
@@ -19,8 +9,6 @@ export default function Product({product, handleBuy, cart}) {
     return false
   }
   
-  
-
   return (
     <div>
       {product.title} - ${product.price}

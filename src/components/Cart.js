@@ -1,6 +1,7 @@
 import * as R from 'ramda';
-import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import React, { Component } from 'react';
+import ProductInCart from "./ProductInCart";
 
 export default function Cart({cart, inventory, handleBuy, checkout, removeFromCart}) {
   let products = R.sortBy(R.prop("title"), R.values(cart));
@@ -16,11 +17,10 @@ export default function Cart({cart, inventory, handleBuy, checkout, removeFromCa
         {
           (products.length) ? 
             products.map(product => (
-              <Item
+              <ProductInCart
                 key={product.id}
                 product={product}
-                productsFromInventory={inventory}
-                inventory={inventory}
+                productFromInventory={inventory[product.id]}
                 handleBuy={handleBuy}  
                 removeFromCart={removeFromCart}             
               />
@@ -42,36 +42,11 @@ export default function Cart({cart, inventory, handleBuy, checkout, removeFromCa
   )
 }
 
-
-function Item({product, productsFromInventory, inventory, handleBuy, removeFromCart}) {
-
-  const productFromInventory = productsFromInventory[product.id]
-
-  return (
-    <div>
-      {product.quantity > 0 ? 
-        <React.Fragment>
-          {product.title} - ${product.price} x {product.quantity}
-        </React.Fragment>
-        :
-        <React.Fragment>
-          <s>{product.title} - ${product.price} x {product.quantity}</s>
-        </React.Fragment>
-      }
-      {" "}
-      {productFromInventory.quantity > 0 ?
-        <button onClick={()=> handleBuy(productFromInventory.id)}>+1</button>
-        :
-        <button disabled>+1</button>
-      }       
-      {" "}
-      {product.quantity > 0 ? 
-        <button onClick={() => removeFromCart(product.id)}>-1</button>
-        :
-        <button disabled>-1</button>
-      }
-      {" "}
-      ({inventory[product.id].quantity} in stock)
-    </div>
-  )
+Cart.propTypes = {
+  cart: PropTypes.object,
+  inventory: PropTypes.object,
+  handleBuy: PropTypes.func,
+  checkout: PropTypes.func,
+  removeFromCart: PropTypes.func
 }
+

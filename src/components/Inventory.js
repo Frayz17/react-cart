@@ -1,9 +1,9 @@
 import * as R from 'ramda';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Product from './Product'
+import ProductInInventory from './ProductInInventory'
 
-export default function Inventory({cart, inventory, handleBuy, selectedProducts}) {
+export default function Inventory({cart, inventory, handleBuy}) {
   let products = R.sortBy(R.prop("title"), R.values(inventory));
 
   return (
@@ -11,7 +11,7 @@ export default function Inventory({cart, inventory, handleBuy, selectedProducts}
       <hr/>
       <h2>Inventory</h2>
       { R.map(product => (
-        <Product 
+        <ProductInInventory 
           key={product.id}
           product={product}  
           handleBuy={handleBuy}
@@ -25,4 +25,5 @@ export default function Inventory({cart, inventory, handleBuy, selectedProducts}
 Inventory.propTypes = {
   cart: PropTypes.object,
   inventory: PropTypes.object,
+  handleBuy: PropTypes.func
 }
