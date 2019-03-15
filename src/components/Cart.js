@@ -1,10 +1,9 @@
-import * as R from 'ramda';
 import PropTypes from 'prop-types';
-import React, { Component } from 'react';
+import React from 'react';
 import ProductInCart from "./ProductInCart";
 
 export default function Cart({cart, inventory, handleBuy, checkout, removeFromCart}) {
-  let products = R.sortBy(R.prop("title"), R.values(cart));
+  let products = Object.keys(cart).map(k => cart[k]);
   
   function totalSumm(products) {
     return products.reduce((acc, curr) => acc + (curr.price * curr.quantity), 0)

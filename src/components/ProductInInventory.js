@@ -1,6 +1,7 @@
-import React, { Component } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 
-export default function ProductInInventory({product, handleBuy, cart}) {
+export default function ProductInInventory({product, cart, handleBuy}) {
 
   function amountProductsSelected() {
     if (cart[product.id] !== undefined) {
@@ -27,3 +28,8 @@ export default function ProductInInventory({product, handleBuy, cart}) {
   );
 }
 
+ProductInInventory.propTypes = {
+  product: PropTypes.object,
+  cart: PropTypes.object,
+  handleBuy: PropTypes.func
+}
