@@ -101,10 +101,9 @@ export default class App extends Component {
   }
 
   checkout = () => {
-    this.setState(prevState => ({
-      ...prevState,
+    this.setState({
       cart: {}
-    }))
+    })
   }
 
   render() {

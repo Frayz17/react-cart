@@ -14,12 +14,7 @@ export default function ProductInInventory({product, cart, handleBuy}) {
     <div>
       {product.title} - ${product.price}
       {" "}
-      {
-        product.quantity > 0 ? 
-        <button onClick={() => handleBuy(product.id)}>Buy</button>
-        : // or handleBuy.bind(null, product, 'inventory')
-        <button disabled>Buy</button>
-      }
+      <button onClick={() => handleBuy(product.id)} disabled={product.quantity > 0 ? null : true}>Buy</button>
       {" "}
       ({amountProductsSelected() === false ? 0 : amountProductsSelected()} selected
       {" "}

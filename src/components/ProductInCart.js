@@ -4,29 +4,19 @@ import PropTypes from 'prop-types';
 export default function ProductInCart({product, productFromInventory, handleBuy, removeFromCart}) {
   productFromInventory = {...productFromInventory}
 
+  const zeroQuantityStyle = {
+    textDecoration: 'line-through'
+  }
+
   return (
     <div>
-      {product.quantity > 0 ? 
-        <React.Fragment>
-          {product.title} - ${product.price} x {product.quantity}
-        </React.Fragment>
-        :
-        <React.Fragment>
-          <s>{product.title} - ${product.price} x {product.quantity}</s>
-        </React.Fragment>
-      }
+      <span style={product.quantity > 0 ? null : zeroQuantityStyle}>
+        {product.title} - ${product.price} x {product.quantity}
+      </span>
       {" "}
-      {productFromInventory.quantity > 0 ?
-        <button onClick={()=> handleBuy(productFromInventory.id)}>+1</button>
-        :
-        <button disabled>+1</button>
-      }       
+      <button onClick={()=> handleBuy(productFromInventory.id)} disabled={productFromInventory.quantity > 0 ? null : true}>+1</button>      
       {" "}
-      {product.quantity > 0 ? 
-        <button onClick={() => removeFromCart(product.id)}>-1</button>
-        :
-        <button disabled>-1</button>
-      }
+      <button onClick={() => removeFromCart(product.id)} disabled={product.quantity > 0 ? null : true}>-1</button>
       {" "}
       ({productFromInventory.quantity} in stock)
     </div>
